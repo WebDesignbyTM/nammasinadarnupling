@@ -1,27 +1,54 @@
 import React, {Component} from 'react';
 import Header from '../../components/header/header.jsx';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 
-class Companies extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+const useStyles = makeStyles((theme) => ({
+  root:{
+    display:'flex',
+    backgroundColor:theme.palette.primary.main,
+    flex:1,
+  },
+  toolbarReplace: {
+    ...theme.mixins.toolbar
+  },
+  content: {
+    flex:1,
+    flexDirection:'column',
+    padding: theme.spacing(3),
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
 
-    };
-  }
 
-  
+}));
 
-  render() {
+export default function Companies(props) {
+  const classes = useStyles();
+  const theme = useTheme();
 
-    return(
-        <Paper className={"home-wrapper"}>
-          <Header title={'Companies'}/>
-          <div>Companies</div>
-        </Paper>
-    )
-  }
+  return (
+    <div className={classes.root}>
+      <Header title='Companies'/>
+      <main className={classes.content}>
+        <div className={classes.toolbarReplace} />
+
+        <div className={classes.topContent}>
+          albatros
+        </div>
+
+        <div className={classes.bottomContent}>
+          321
+        </div>
+      </main>
+
+    </div>
+  )
 }
-
-export default Companies;

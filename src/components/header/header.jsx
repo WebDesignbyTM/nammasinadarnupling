@@ -26,7 +26,6 @@ import {Link} from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    position:'relative'
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
