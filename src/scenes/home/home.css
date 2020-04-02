@@ -1,0 +1,5 @@
+.home-wrapper {
+  background: var(--background-color);
+  min-height: 100vh;
+  height: 100%;
+}
