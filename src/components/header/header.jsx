@@ -22,6 +22,8 @@ import BusinessIcon from '@material-ui/icons/Business';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import {Link} from 'react-router-dom';
 
+import {userRegister} from '../../api/requests.js';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
