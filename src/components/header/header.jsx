@@ -15,6 +15,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
 
 import HomeIcon from '@material-ui/icons/Home';
 import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
@@ -22,7 +23,9 @@ import BusinessIcon from '@material-ui/icons/Business';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import {Link} from 'react-router-dom';
 
-import {userRegister} from '../../api/requests.js';
+import Popper from '@material-ui/core/Popper';
+
+import User from '../../cards/user/user.jsx';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -120,13 +123,19 @@ const useStyles = makeStyles((theme) => ({
   },
   chevIcon: {
     color:theme.palette.secondary.main
+  },
+  popper: {
+    paddingTop:10,
+    zIndex: theme.zIndex.drawer+2
   }
 }));
 
 export default function Header(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [popperOpen, setPopperOpen] = React.useState(false);
+  const [popperAnchor, setPopperAnchor] = React.useState(null);
   const title=props.title;
   const pages=[
     {name:'Home', icon: HomeIcon, link:'/home'},
@@ -134,20 +143,26 @@ export default function Header(props) {
     {name:'Companies', icon:BusinessIcon, link:'/companies'}];
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setDrawerOpen(true);
   };
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    setDrawerOpen(false);
   };
+
+  const handlePopperClick = (event) => {
+    setPopperAnchor(event.currentTarget);
+    setPopperOpen((prev)=>!prev);
+  }
 
   return (
     <div className={classes.root}>
       <CssBaseline />
+
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: drawerOpen,
         })}
       >
         <Toolbar>
@@ -157,7 +172,7 @@ export default function Header(props) {
             onClick={handleDrawerOpen}
             edge="start"
             className={clsx(classes.menuButton, {
-              [classes.hide]: open,
+              [classes.hide]: drawerOpen,
             })}
           >
             <MenuIcon />
@@ -166,23 +181,31 @@ export default function Header(props) {
             {title}
           </Typography>
 
-          <IconButton className={classes.userButton}>
-            <AccountCircleIcon/>
+          <IconButton className={classes.userButton} onClick={handlePopperClick}>
+            <AccountCircleIcon />
           </IconButton>
 
         </Toolbar>
       </AppBar>
+
+      <Popper open={popperOpen} anchorEl={popperAnchor} placement='bottom-end' className={classes.popper}>
+        <Paper>
+          <User/>
+        </Paper>
+      </Popper>
+
+
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
+          [classes.drawerOpen]: drawerOpen,
+          [classes.drawerClose]: !drawerOpen,
         })}
         classes={{
           paper: clsx({
             [classes.paper]: true,
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
+            [classes.drawerOpen]: drawerOpen,
+            [classes.drawerClose]: !drawerOpen,
           }),
         }}
       >
