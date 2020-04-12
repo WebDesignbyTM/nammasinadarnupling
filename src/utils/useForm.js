@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-const useSearchForm = (callback) => {
+const useForm = (callback) => {
   const [input, setInput] = useState({});
   const handleSubmit = (event) => {
     if (event) {
@@ -18,4 +18,4 @@ const useSearchForm = (callback) => {
     input
   };
 }
-export default useSearchForm;
+export default useForm;

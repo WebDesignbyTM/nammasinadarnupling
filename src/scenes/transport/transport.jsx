@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import useSearchForm from './useSearchForm.js';
+import useForm from '../../utils/useForm.js';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +46,7 @@ export default function Transport(props) {
   const printData = () => {
     console.log(input.start, input.destination, input.company);
   };
-  const {input, handleInputChange, handleSubmit} = useSearchForm(printData);
+  const {input, handleInputChange, handleSubmit} = useForm(printData);
 
 
   return (

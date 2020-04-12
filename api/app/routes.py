@@ -14,7 +14,7 @@ def user_login():
 
 
 @login_required
-@app.route('/logout/')
+@app.route('/logout/', methods=['POST'])
 def logout():
     logout_user()
     return 'User logged out'
@@ -27,3 +27,17 @@ def register():
 	db.session.add(user)
 	db.session.commit()
 	return 'User successfully registered'
+
+@app.route('/is_user_logged/')
+def is_user_logged():
+	res={"logged":current_user.is_authenticated}
+	return res
+
+@app.route('/get_user_data/')
+def get_user_name():
+	res={
+	"name":current_user.username,
+	"email":current_user.email,
+	"fullname":current_user.fullname
+	}
+	return res
