@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     flex:1,
   },
   card:{
-    minWidth: 200,
+    minWidth: 250,
     alignItems:'center'
   },
   content: {
