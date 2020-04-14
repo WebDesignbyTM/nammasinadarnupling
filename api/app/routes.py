@@ -41,3 +41,14 @@ def get_user_name():
 	"fullname":current_user.fullname
 	}
 	return res
+
+@app.route('/edit_user_data/', methods=['PUT'])
+def edit_user_data():
+	data=request.get_json()
+	password=data['password']
+	data.pop('password', None)
+	user=User.query.filter_by(id=current_user.id)
+	user.update(data, synchronize_session=False)
+	user.first().set_password(password)
+	db.session.commit();
+	return 'User data updated'

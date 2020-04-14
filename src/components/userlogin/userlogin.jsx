@@ -16,8 +16,17 @@ import {Link} from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   card:{
     display:'flex',
-    minWidth: 200,
+    minWidth: 250,
     alignItems:'center'
+  },
+  loginButton:{
+    marginTop:10,
+    flexGrow:1
+  },
+  registerLink:{
+    textDecoration:'none',
+    flexGrow:2,
+    marginTop:10
   }
 
 
@@ -26,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 export default function UserLogin(props) {
   const classes=useStyles();
   const theme=useTheme();
-  const info={fullname:'cipri marin', email:'cipri@cuie.com'};
   const {input, handleInputChange, handleSubmit} = useForm(()=>{console.log(input)});
   const handleLogin = (event) => {
       if(event)
@@ -48,19 +56,21 @@ export default function UserLogin(props) {
             <Grid container
               direction="column"
             >
-              <TextField label="Username" name="username" onChange={handleInputChange} value={input.username}/>
-              <TextField label="Password" name="password" onChange={handleInputChange} value={input.password}/>
-              <Button type="submit" variant="contained" color="secondary">
-                Login
-              </Button>
+              <TextField variant="outlined" label="Username" name="username" onChange={handleInputChange} value={input.username}/>
+              <TextField variant="outlined" label="Password" name="password" onChange={handleInputChange} value={input.password}/>
+              <Grid container
+                direction="row-reverse"
+                classname={classes.loginRegister}>
+                <Button className={classes.loginButton} type="submit" variant="contained" color="secondary">
+                  Login
+                </Button>
+                <Link className={classes.registerLink} to={'/register'}>
+                  Register
+                </Link>
+              </Grid>
             </Grid>
           </form>
         </CardContent>
-        <CardActions>
-          <Link to={'/register'}>
-            Register
-          </Link>
-        </CardActions>
       </Grid>
     </Card>
   )

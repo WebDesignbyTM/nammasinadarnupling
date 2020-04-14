@@ -45,3 +45,13 @@ export const userData = payload => {
 		return res.data;
 	})
 }
+
+export const userEditData = payload => {
+	return axios
+	.put('/edit_user_data/',{
+		"username": payload.username,
+		"password": payload.password,
+		"email": payload.email,
+		"fullname":payload.fullname
+	})
+}
