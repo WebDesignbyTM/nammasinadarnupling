@@ -1,8 +1,8 @@
-"""reinitialized database
+"""empty message
 
-Revision ID: d5b3ed8616d6
+Revision ID: 572881aacc5b
 Revises: 
-Create Date: 2020-04-01 20:00:03.671392
+Create Date: 2020-04-15 18:52:59.712673
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd5b3ed8616d6'
+revision = '572881aacc5b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,10 +28,14 @@ def upgrade():
     op.create_index(op.f('ix_company_company_name'), 'company', ['company_name'], unique=True)
     op.create_table('route',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('route_hash', sa.String(length=256), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('route_hash')
+    sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('stop',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(length=64), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_stop_name'), 'stop', ['name'], unique=True)
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=64), nullable=True),
@@ -52,6 +56,14 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_car_brand'), 'car', ['brand'], unique=False)
+    op.create_table('leg',
+    sa.Column('leg_no', sa.Integer(), nullable=False),
+    sa.Column('route_id', sa.Integer(), nullable=False),
+    sa.Column('stop_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['route_id'], ['route.id'], ),
+    sa.ForeignKeyConstraint(['stop_id'], ['stop.id'], ),
+    sa.PrimaryKeyConstraint('leg_no', 'route_id')
+    )
     op.create_table('trip',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('time', sa.DateTime(), nullable=True),
@@ -81,12 +93,15 @@ def downgrade():
     op.drop_table('reservation')
     op.drop_index(op.f('ix_trip_time'), table_name='trip')
     op.drop_table('trip')
+    op.drop_table('leg')
     op.drop_index(op.f('ix_car_brand'), table_name='car')
     op.drop_table('car')
     op.drop_index(op.f('ix_user_username'), table_name='user')
     op.drop_index(op.f('ix_user_fullname'), table_name='user')
     op.drop_index(op.f('ix_user_email'), table_name='user')
     op.drop_table('user')
+    op.drop_index(op.f('ix_stop_name'), table_name='stop')
+    op.drop_table('stop')
     op.drop_table('route')
     op.drop_index(op.f('ix_company_company_name'), table_name='company')
     op.drop_table('company')
