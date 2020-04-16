@@ -55,3 +55,12 @@ export const userEditData = payload => {
 		"fullname":payload.fullname
 	})
 }
+
+export const getReqSubtrips = payload => {
+	return axios
+	.get('/get_req_subtrips/', {
+		params: { stop: payload.stops }
+	}).then(res => {
+		return res.data;
+	})
+}
