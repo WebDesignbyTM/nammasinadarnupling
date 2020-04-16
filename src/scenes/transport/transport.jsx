@@ -7,7 +7,13 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import useForm from '../../utils/useForm.js';
+import {getReqSubtrips} from '../../api/requests.js';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+// import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -40,13 +46,34 @@ const useStyles = makeStyles((theme) => ({
 export default function Transport(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const [start, setStart] = useState();
-  const [destination, setDestination] = useState();
-  const [company, setCompany] = useState();
-  const printData = () => {
-    console.log(input.start, input.destination, input.company);
-  };
-  const {input, handleInputChange, handleSubmit} = useForm(printData);
+  const [stops, setStops] = useState(['']);
+  const [trips, setTrips] = useState([]);
+  
+  const changeStop = (newVal, idx) => {
+    let aux = [...stops];
+    aux[idx] = newVal;
+    setStops(aux);
+  }
+
+  const addStop = () => {
+    setStops(stops.concat(''));
+  }
+
+  const deleteStop = (idx) => {
+    let aux = [...stops];
+    aux.splice(idx, 1);
+    setStops(aux);
+  }
+
+  const handleSubmit = (event) => {
+    if (event) 
+      event.preventDefault();
+    const payload = {stops: stops};
+    const req = getReqSubtrips;
+    req(payload).then(res=> {
+      setTrips(res);
+    });
+  }
 
 
   return (
@@ -57,14 +84,49 @@ export default function Transport(props) {
 
         <div>
           <form className={classes.searchForm} onSubmit={handleSubmit}>
-            <TextField label="Start" name="start" onChange={handleInputChange} value={input.start}/>
-            <TextField label="Destination" name="destination" onChange={handleInputChange} value={input.destination}/>
-            <TextField label="Company" name="company" onChange={handleInputChange} value={input.company}/>
+            {stops.map((stop, idx) => {
+              let lbl = "Stop no. " + (idx + 1);
+              return (
+                <div>
+                  <TextField label={lbl} name={lbl.toLowerCase()} onChange={e => changeStop(e.target.value, idx)} value={stops[idx]}/>
+                  <Button variant="contained" color="secondary" onClick={() => deleteStop(idx)}>
+                    Delete stop
+                  </Button>
+                </div>)
+            })}
+            <Button variant="contained" color="secondary" onClick={addStop}>
+              Add stop
+            </Button>
             <Button type="submit" variant="contained" color="secondary">
               Submit
             </Button>
           </form>
         </div>
+
+        {trips.map((trip) => {
+          return <div><p>{trip.id}</p><p>{trip.route_id}</p><p>{trip.company_id}</p></div>
+        })}
+
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Trip id</TableCell>
+              <TableCell align="right">Route id</TableCell>
+              <TableCell align="right">Company id</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {trips.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell component="th" scope="row">
+                  {row.trip}
+                </TableCell>
+                <TableCell align="right">{row.route}</TableCell>
+                <TableCell align="right">{row.company}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
       </main>
 

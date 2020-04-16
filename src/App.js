@@ -29,13 +29,6 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [currentTime, setCurrentTime] = useState(0);// initializeaza cu valoarea 0
-
-  useEffect(() => {
-    fetch('/time').then(res => res.json()).then(data => {
-      setCurrentTime(data.time);
-    });
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -47,10 +40,10 @@ function App() {
             {/* A <Switch> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}
             <Switch>
-              <Route path="/home" component={Home}/>
               <Route path="/companies" component={Companies}/>
               <Route path="/transport" component={Transport}/>
               <Route path="/register" component={EditAndRegister}/>
+              <Route path={["/home", "/"]} component={Home}/>
             </Switch>
           </div>
         </Router>

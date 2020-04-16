@@ -47,11 +47,27 @@ class Trip(db.Model):
 
 class Route(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  route_hash = db.Column(db.String(256), unique=True)
   trips = db.relationship('Trip', backref='route', lazy='dynamic')
+  legs = db.relationship('Leg', backref='route', lazy='dynamic')
 
   def __repr__(self):
-    return '<Trip id {}>'.format(self.id)
+    return '<Route id {}>'.format(self.id)
+
+class Leg(db.Model):
+  leg_no = db.Column(db.Integer, primary_key=True)
+  route_id = db.Column(db.Integer, db.ForeignKey('route.id'), primary_key=True)
+  stop_id = db.Column(db.Integer, db.ForeignKey('stop.id'))
+
+  def __repr__(self):
+    return '<Leg no. {} for route id {}>'.format(self.leg_no, self.route_id)
+
+class Stop(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(64), index=True, unique=True)
+
+  def __repr__(self):
+    return '<Stop {}>'.format(self.name)
+
 
 class Company(db.Model):
   id = db.Column(db.Integer, primary_key=True)
