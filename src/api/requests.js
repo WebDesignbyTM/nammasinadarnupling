@@ -64,3 +64,12 @@ export const getReqSubtrips = payload => {
 		return res.data;
 	})
 }
+
+export const getCompanies = payload => {
+	return axios
+	.get('/get_companies/', {
+		params: {name: payload.name}
+	}).then(res => {
+		return res.data;
+	})
+}
