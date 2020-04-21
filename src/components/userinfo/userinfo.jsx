@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom';
+import Divider from '@material-ui/core/Divider';
 import {userLogout, userData} from '../../api/requests.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,11 +19,20 @@ const useStyles = makeStyles((theme) => ({
     flex:1,
   },
   card:{
-    minWidth: 250,
-    alignItems:'center'
+    minWidth: 300,
+    alignItems:'center',
+    borderRadius:10
   },
   content: {
-    textAlign:'center'
+    textAlign:'center',
+    border:10
+  },
+  actionButton:{
+    margin:'5px 10px 5px 10px'
+  },
+  divider:{
+    marginTop:5,
+    marginBottom:5
   }
 
 
@@ -31,15 +41,12 @@ const useStyles = makeStyles((theme) => ({
 export default function UserInfo(props) {
   const classes=useStyles();
   const theme=useTheme();
-  const [userEmail, setUserEmail]=React.useState();
-  const [userFullname, setUserFullname]=React.useState();
-  const [userUsername, setUserUsername]=React.useState();
+  const [userInfo, setUserInfo] = React.useState();
+
 
   React.useEffect(()=>{
     userData().then(res=>{
-      setUserEmail(res.email);
-      setUserFullname(res.fullname);
-      setUserUsername(res.username);
+      setUserInfo(res);
     })
   })
 
@@ -63,30 +70,34 @@ export default function UserInfo(props) {
         >
           <AccountCircleIcon fontSize='large'/>
           <CardContent classes={classes.content}>
-            <Typography>
-              {userFullname}
+            <Typography variant="h6">
+              {userInfo?userInfo.fullname:"Fullname"}
             </Typography>
 
-            <Typography>
-              {userEmail}
+            <Typography variant="h6">
+              {userInfo?userInfo.email:"Email"}
             </Typography>
           </CardContent>
-        </Grid>
-        <Grid container
-          direction="row-reverse"
-        >
-          <CardActions>
-            <Button size="small" color="primary">
-              <Link to="/register" style={{ textDecoration: 'none' }}>
-                Edit
-              </Link>
-            </Button>
-            <Button size="small" color="primary" onClick={handleLogout}>
-              Logout
-            </Button>
-          </CardActions>
+
         </Grid>
 
+        <Button className={classes.actionButton} variant="outlined" size="small" color="primary">
+          <Link to={userInfo?userInfo.usertype=='personal'?"/reservation":"/trip":""} style={{ textDecoration: 'none', color:theme.palette.primary.light}}>
+            {userInfo?userInfo.usertype=='personal'?'My reservations':'My routes':'Reserve/routes'}
+          </Link>
+        </Button>
+
+        <Button className={classes.actionButton} variant="outlined" size="small" color="primary">
+          <Link to="/register" style={{ textDecoration: 'none', color:theme.palette.primary.light}}>
+            Edit profile
+          </Link>
+        </Button>
+
+        <Divider variant="middle" className={classes.divider}/>
+
+        <Button className={classes.actionButton} variant="outlined"size="small" color="primary" onClick={handleLogout}>
+          Logout
+        </Button>
 
       </Grid>
     </Card>
