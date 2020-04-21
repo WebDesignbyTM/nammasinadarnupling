@@ -217,7 +217,7 @@ export default function Header(props) {
         <Divider />
         <List>
           {pages.map((page, index) => (
-            <Link to={page.link} className={classes.link}>
+            <Link to={page.link} className={classes.link} key={index}>
               <ListItem className={classes.drawerListItem} button key={page.name}>
                 <ListItemIcon className={clsx({
                   [classes.drawerIcon]:(page.link!=window.location.pathname),

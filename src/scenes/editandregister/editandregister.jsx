@@ -118,8 +118,7 @@ export default function EditAndRegister(props) {
         <Paper>
             <form onSubmit={handleEditRegister}>
               <Grid container
-                direction="column"
-                classname={classes.userForm}>
+                direction="column">
                 <RadioGroup className={clsx({[classes.companyRadio]:true, [classes.displayObjectNone]:logged})}
                 aria-label="Personal or Company" name="userType"
                 value={input.userType} onChange={handleInputChange}>

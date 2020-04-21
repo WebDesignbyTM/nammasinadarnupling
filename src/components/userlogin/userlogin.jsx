@@ -75,8 +75,7 @@ export default function UserLogin(props) {
               <TextField className={classes.loginField} variant="outlined"
               label="Password" name="password" onChange={handleInputChange} value={input.password}/>
               <Grid container
-                direction="column"
-                classname={classes.loginRegister}>
+                direction="column">
 
                 <Typography color='error' align='center' className={clsx({
                   [classes.displayObjectNone]:(!errorOpen)
