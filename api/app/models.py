@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
   fullname = db.Column(db.String(128), index=True, unique=True)
   password_hash = db.Column(db.String(128))
   reservations = db.relationship('Reservation', backref='client', lazy='dynamic')
+  user_type = db.Column(db.String(64))
 
   def __repr__(self):
     return '<User {}>'.format(self.username)

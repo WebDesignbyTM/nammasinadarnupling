@@ -5,6 +5,7 @@ import './App.css';
 import Home from './scenes/home/home.jsx';
 import Companies from './scenes/companies/companies.jsx';
 import Transport from './scenes/transport/transport.jsx';
+import Reservations from './scenes/reservations/reservations.jsx';
 import EditAndRegister from './scenes/editandregister/editandregister.jsx';
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
@@ -51,6 +52,7 @@ function App() {
               <Route path="/companies" component={Companies}/>
               <Route path="/transport" component={Transport}/>
               <Route path="/register" component={EditAndRegister}/>
+              <Route path="/reservation" component={Reservations}/>
             </Switch>
           </div>
         </Router>

@@ -12,22 +12,31 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import {userLogin} from '../../api/requests.js';
 import {Link} from 'react-router-dom';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   card:{
     display:'flex',
-    minWidth: 250,
+    minWidth: 300,
     alignItems:'center'
   },
   loginButton:{
-    marginTop:10,
-    flexGrow:1
+    margin:10,
+    flexGrow:1,
   },
   registerLink:{
     textDecoration:'none',
+    color:theme.palette.secondary.dark,
     flexGrow:2,
-    marginTop:10
-  }
+    margin:10
+  },
+  loginField:{
+    padding:10
+  },
+  displayObjectNone:{
+    display:'none'
+  },
+
 
 
 }));
@@ -36,6 +45,7 @@ export default function UserLogin(props) {
   const classes=useStyles();
   const theme=useTheme();
   const {input, handleInputChange, handleSubmit} = useForm(()=>{console.log(input)});
+  const [errorOpen, setErrorOpen] = React.useState(false);
   const handleLogin = (event) => {
       if(event)
         event.preventDefault();
@@ -44,7 +54,11 @@ export default function UserLogin(props) {
         password:input.password,
         remember:true
       }).then(res=>{
-        window.location.reload();
+        if(res.status == 200) {
+          window.location.reload();
+        }else {
+          setErrorOpen(true);
+        }
       });
   }
   return (
@@ -56,16 +70,30 @@ export default function UserLogin(props) {
             <Grid container
               direction="column"
             >
-              <TextField variant="outlined" label="Username" name="username" onChange={handleInputChange} value={input.username}/>
-              <TextField variant="outlined" label="Password" name="password" onChange={handleInputChange} value={input.password}/>
+              <TextField className={classes.loginField} variant="outlined"
+              label="Username" name="username" onChange={handleInputChange} value={input.username}/>
+              <TextField className={classes.loginField} variant="outlined"
+              label="Password" name="password" onChange={handleInputChange} value={input.password}/>
               <Grid container
-                direction="row-reverse"
+                direction="column"
                 classname={classes.loginRegister}>
-                <Button className={classes.loginButton} type="submit" variant="contained" color="secondary">
+
+                <Typography color='error' align='center' className={clsx({
+                  [classes.displayObjectNone]:(!errorOpen)
+                })}>
+                  Username/password incorrect
+                </Typography>
+
+                <Button className={classes.loginButton} type="submit" variant="contained" color="primary">
                   Login
                 </Button>
                 <Link className={classes.registerLink} to={'/register'}>
-                  Register
+                  <Typography>
+                    Don't have an account?
+                  </Typography>
+                  <Typography>
+                    Register here!
+                  </Typography>
                 </Link>
               </Grid>
             </Grid>

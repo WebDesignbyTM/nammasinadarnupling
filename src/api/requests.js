@@ -9,7 +9,8 @@ export const userRegister = payload => {
 		"username": payload.username,
 		"password": payload.password,
 		"email": payload.email,
-		"fullname":payload.fullname
+		"fullname":payload.fullname,
+		"usertype":payload.userType
 	})
 }
 
