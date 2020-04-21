@@ -11,7 +11,6 @@ import {getReqSubtrips} from '../../api/requests.js';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-// import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
@@ -87,7 +86,7 @@ export default function Transport(props) {
             {stops.map((stop, idx) => {
               let lbl = "Stop no. " + (idx + 1);
               return (
-                <div>
+                <div key={idx}>
                   <TextField label={lbl} name={lbl.toLowerCase()} onChange={e => changeStop(e.target.value, idx)} value={stops[idx]}/>
                   <Button variant="contained" color="secondary" onClick={() => deleteStop(idx)}>
                     Delete stop
@@ -102,10 +101,6 @@ export default function Transport(props) {
             </Button>
           </form>
         </div>
-
-        {trips.map((trip) => {
-          return <div><p>{trip.id}</p><p>{trip.route_id}</p><p>{trip.company_id}</p></div>
-        })}
 
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
