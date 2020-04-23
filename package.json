@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "date": "^1.0.2",
     "material-kit-react": "^1.8.0",
+    "material-table": "^1.57.2",
     "material-ui": "^0.20.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
