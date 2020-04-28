@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/header/header.jsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 
 
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CompanyProfile(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const company_data=props.selectedCompany;
 
   useEffect(() => {
     console.log(props);
@@ -45,8 +47,10 @@ export default function CompanyProfile(props) {
   return (
     <div>
       <main className={classes.content}>
-        <div className={classes.toolbarReplace} />
-        <p>macar atata</p>
+        <Typography>
+          Check out our website: TO BE CONTINUED
+          Check out our latest offers!!
+        </Typography>
       </main>
 
     </div>

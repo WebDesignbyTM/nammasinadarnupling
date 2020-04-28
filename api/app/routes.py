@@ -113,6 +113,9 @@ def get_companies():
 			'id': x.id,
 			'company_name': x.company_name,
 			'company_cui': x.company_cui,
+			'company_phone':x.company_phone,
+			'company_email':x.company_email,
+			'company_address':x.company_address,
 			'cars': cars,
 			'trips': trips
 		})

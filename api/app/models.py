@@ -74,6 +74,9 @@ class Company(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   company_name = db.Column(db.String(64), index=True, unique=True)
   company_cui = db.Column(db.String(128), unique=True)
+  company_phone = db.Column(db.String(64))
+  company_email = db.Column(db.String(64))
+  company_address = db.Column(db.String(128))
   cars = db.relationship('Car', backref='company', lazy='dynamic')
   trips = db.relationship('Trip', backref='company', lazy='dynamic')
 
