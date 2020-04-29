@@ -1,6 +1,6 @@
 from app import app, db
 from flask_login import logout_user, login_required, current_user, login_user
-from app.models import User, Stop, Leg, Route, Trip, Company, Car
+from app.models import User, Stop, Leg, Route, Trip, Company, Car, Reservation
 from flask import jsonify, request, json, make_response
 from sqlalchemy import *
 import sqlalchemy
@@ -117,3 +117,18 @@ def get_companies():
 			'trips': trips
 		})
 	return make_response(jsonify(res), 200)
+
+@login_required
+@app.route('/make_reservation/', methods=['POST'])
+def makeReservation():
+	data = request.args.get('id')
+	print(data)
+	try:
+		new_reservation = Reservation(user_id=current_user.id, trip_id=data)
+		db.session.add(new_reservation)
+		db.session.commit()
+	except:
+		print('coae nu')
+		db.session.rollback()
+		return make_response('fut-o', 500)
+	return make_response('xd', 200)

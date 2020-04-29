@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import {getReqSubtrips} from '../../api/requests.js';
+import {getReqSubtrips, userLogged, makeReservation} from '../../api/requests.js';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -74,6 +74,21 @@ export default function Transport(props) {
     });
   }
 
+  const reserveTrip = (trip) => {
+    console.log(trip);
+    userLogged().then(res => {
+      if (!res.logged) {
+        alert('coae logheaza-te fmm');
+      } else {
+        let payload = {trip_id: trip.trip};
+        console.log(payload);
+        makeReservation(payload).then(res => {
+          console.log(res);
+        });
+      }
+    });
+  }
+
 
   return (
     <div className={classes.root}>
@@ -108,6 +123,7 @@ export default function Transport(props) {
               <TableCell>Trip id</TableCell>
               <TableCell align="right">Route id</TableCell>
               <TableCell align="right">Company id</TableCell>
+              <TableCell align="right">Rezervă călătorie</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -118,6 +134,11 @@ export default function Transport(props) {
                 </TableCell>
                 <TableCell align="right">{row.route}</TableCell>
                 <TableCell align="right">{row.company}</TableCell>
+                <TableCell align="right">
+                  <Button variant="contained" color="secondary" onClick={() => reserveTrip(row)}>
+                    Rezervă
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
