@@ -81,7 +81,7 @@ export default function EditAndRegister(props) {
     } else {
       setTitle('Register');
     }
-  })
+  }, [])
 
   const [errorOpen, setErrorOpen] = React.useState(false);
 
