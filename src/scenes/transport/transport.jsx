@@ -13,6 +13,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import MaterialTable from 'material-table';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,24 +21,28 @@ const useStyles = makeStyles((theme) => ({
     display:'flex',
     backgroundColor:theme.palette.primary.main,
     flex:1,
+    justifyContent:'center'
   },
   toolbarReplace: {
     ...theme.mixins.toolbar
   },
   content: {
-    flex:1,
     flexDirection:'column',
     padding: theme.spacing(3),
+    flexBasis:800
   },
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
-  searchForm: {
-    display:'flex',
-    flexDirection:'column',
-  }
+  appBar: {
+    position: 'relative',
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+  },
 
 
 }));
@@ -75,15 +80,17 @@ export default function Transport(props) {
   }
 
   const reserveTrip = (trip) => {
-    console.log(trip);
     userLogged().then(res => {
       if (!res.logged) {
-        alert('coae logheaza-te fmm');
+        alert('Rezervările se pot face doar de către utilizatori înregistrați!');
       } else {
         let payload = {trip_id: trip.trip};
-        console.log(payload);
         makeReservation(payload).then(res => {
-          console.log(res);
+          if (res == 'Reservation successful') {
+            alert('Rezervarea a fost făcută cu succes');
+          } else {
+            alert('Rezervarea a eșuat, contactați un administrator');
+          }
         });
       }
     });
@@ -117,32 +124,35 @@ export default function Transport(props) {
           </form>
         </div>
 
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Trip id</TableCell>
-              <TableCell align="right">Route id</TableCell>
-              <TableCell align="right">Company id</TableCell>
-              <TableCell align="right">Rezervă călătorie</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {trips.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
-                  {row.trip}
-                </TableCell>
-                <TableCell align="right">{row.route}</TableCell>
-                <TableCell align="right">{row.company}</TableCell>
-                <TableCell align="right">
-                  <Button variant="contained" color="secondary" onClick={() => reserveTrip(row)}>
-                    Rezervă
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <Paper>
+          <MaterialTable
+            columns={[
+              { title: 'Id călătorie',    field: 'trip' },
+              { title: 'Rută',    field: 'route' },
+              { title: 'Companie',   field: 'company' }
+            ]}
+            data={trips}
+            title='Trasee'
+            options={{
+              search: false
+            }}
+            actions={[
+              {
+                icon: 'add',
+                tooltip: 'Rezervă călătorie',
+                onClick: (event, rowData) => reserveTrip(rowData)
+              }
+            ]}
+            localization= {{
+              header: {
+                actions: 'Rezervă'
+              }
+            }}
+            options={{
+              actionsColumnIndex: -1
+            }}
+          />
+        </Paper>
 
       </main>
 

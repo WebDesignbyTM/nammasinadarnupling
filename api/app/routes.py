@@ -63,6 +63,7 @@ def edit_user_data():
 
 @app.route('/get_req_subtrips/', methods=['GET'])
 def get_req_subtrips():
+	print(request)
 	data = request.args.getlist('stop[]')
 	stop = []
 	[stop.append(Stop.query.filter_by(name=x).first()) for x in data]
@@ -124,14 +125,13 @@ def get_companies():
 @login_required
 @app.route('/make_reservation/', methods=['POST'])
 def makeReservation():
-	data = request.args.get('id')
-	print(data)
+	data = request.get_json()['params']['trip_id']
 	try:
 		new_reservation = Reservation(user_id=current_user.id, trip_id=data)
 		db.session.add(new_reservation)
 		db.session.commit()
 	except:
-		print('coae nu')
+		print('Somethin went wrong...')
 		db.session.rollback()
-		return make_response('fut-o', 500)
-	return make_response('xd', 200)
+		return make_response('An error ocurred', 500)
+	return make_response('Reservation successful', 200)

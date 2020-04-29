@@ -26,4 +26,4 @@ yarn-error.log*
 venv/
 __pycache__/
 migrations/
-app.db
+api/app.db
