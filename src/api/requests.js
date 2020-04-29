@@ -67,9 +67,8 @@ export const getCompanies = async payload => {
 	return res.data
 }
 
-export const registerCompany = payload => {
-	console.log(payload)
-	return axios
+export const registerCompany = async payload => {
+	const res = await axios
 	.post('/register_company/', {
 		"name":payload.name,
 		"cui":payload.cui,
@@ -77,6 +76,7 @@ export const registerCompany = payload => {
 		"email":payload.email,
 		"address":payload.address
 	})
+	return res
 }
 export const makeReservation = async payload => {
 	const res = await axios
