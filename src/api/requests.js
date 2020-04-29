@@ -74,3 +74,15 @@ export const getCompanies = payload => {
 		return res.data;
 	})
 }
+
+export const registerCompany = payload => {
+	console.log(payload)
+	return axios
+	.post('/register_company/', {
+		"name":payload.name,
+		"cui":payload.cui,
+		"phone":payload.phone,
+		"email":payload.email,
+		"address":payload.address
+	})
+}

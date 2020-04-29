@@ -35,6 +35,23 @@ def register():
 		db.session.rollback()
 		return make_response('User data not correct', 269)
 
+@app.route('/register_company/', methods=['POST'])
+def register_company():
+	data=request.get_json()
+	print(current_user.is_authenticated)
+	if current_user.is_authenticated != True:
+		return make_response('No owner for company', 269)
+
+	try:
+		company=Company(company_name=data['name'], company_cui=data['cui'], company_phone=data['phone'], 
+			company_email=data['email'], company_address=data['address'], user_id=current_user.id)
+		db.session.add(company)
+		db.session.commit()
+		return make_response('Company successfully registered', 200)
+	except sqlalchemy.exc.IntegrityError:
+		db.session.rollback()
+		return make_response('Company data not correct', 269)
+
 @app.route('/is_user_logged/')
 def is_user_logged():
 	res={"logged":current_user.is_authenticated}
