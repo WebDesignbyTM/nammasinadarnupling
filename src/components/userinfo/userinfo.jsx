@@ -48,7 +48,7 @@ export default function UserInfo(props) {
     userData().then(res=>{
       setUserInfo(res);
     })
-  })
+  },[])
 
   const handleLogout = () => {
     userLogout().then(res=>{

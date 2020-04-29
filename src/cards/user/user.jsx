@@ -36,7 +36,7 @@ export default function User(props) {
     userLogged().then(res=>{
       setLogged(res.logged)
     })
-  })
+  },[])
 
 
   return (
