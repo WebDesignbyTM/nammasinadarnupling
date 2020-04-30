@@ -11,6 +11,7 @@ class User(UserMixin, db.Model):
   password_hash = db.Column(db.String(128))
   reservations = db.relationship('Reservation', backref='client', lazy='dynamic')
   user_type = db.Column(db.String(64))
+  company = db.relationship('Company', backref='user', lazy='dynamic')
 
   def __repr__(self):
     return '<User {}>'.format(self.username)
@@ -79,6 +80,7 @@ class Company(db.Model):
   company_address = db.Column(db.String(128))
   cars = db.relationship('Car', backref='company', lazy='dynamic')
   trips = db.relationship('Trip', backref='company', lazy='dynamic')
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
   def __repr__(self):
     return 'Company {}'.format(self.company_name)
