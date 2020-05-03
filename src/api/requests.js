@@ -85,3 +85,17 @@ export const makeReservation = async payload => {
 		})
 	return res.data
 }
+
+export const getUserCompanies = async () => {
+	const res = await axios
+		.get('/get_user_companies/')
+	return res.data
+}
+
+export const createStop = async (payload) => {
+	const res = await axios
+		.post('/create_stop/', {
+			params: { name: payload.name }
+		});
+		return res.data;
+}
