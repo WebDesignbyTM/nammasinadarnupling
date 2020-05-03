@@ -19,6 +19,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import UserProfile from '../../components/userprofile/userprofile.jsx';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -139,6 +140,10 @@ export default function Home(props) {
                     }
                     <CompanyCtrlPanel/>
                   </div>);
+              else if (user.usertype === 'personal')
+                return (
+                  <UserProfile/>
+                );
             }()}
 
           </Grid>

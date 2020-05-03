@@ -81,7 +81,7 @@ export const registerCompany = async payload => {
 export const makeReservation = async payload => {
 	const res = await axios
 		.post('/make_reservation/', {
-			params: { trip_id: payload.trip_id }
+			"trip_id": payload.trip_id
 		})
 	return res.data
 }
@@ -95,7 +95,13 @@ export const getUserCompanies = async () => {
 export const createStop = async (payload) => {
 	const res = await axios
 		.post('/create_stop/', {
-			params: { name: payload.name }
+			"name": payload.name
 		});
 		return res.data;
+}
+
+export const getUserReservations = async () => {
+	const res = await axios
+		.get('/get_user_reservations/')
+	return res.data;
 }

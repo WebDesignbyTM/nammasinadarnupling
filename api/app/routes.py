@@ -83,7 +83,6 @@ def edit_user_data():
 
 @app.route('/get_req_subtrips/', methods=['GET'])
 def get_req_subtrips():
-	print(request)
 	data = request.args.getlist('stop[]')
 	stop = []
 	[stop.append(Stop.query.filter_by(name=x).first()) for x in data]
@@ -145,7 +144,7 @@ def get_companies():
 @login_required
 @app.route('/make_reservation/', methods=['POST'])
 def makeReservation():
-	data = request.get_json()['params']['trip_id']
+	data = request.get_json()['trip_id']
 	try:
 		new_reservation = Reservation(user_id=current_user.id, trip_id=data)
 		db.session.add(new_reservation)
@@ -182,11 +181,9 @@ def getUserCompanies():
 			
 @app.route('/create_stop/', methods=['POST'])
 def createStop():
-	data = request.get_json()['params']['name']
-	print(data)
+	data = request.get_json()['name']
 	try:
 		newStop = Stop(name=data)
-		print(newStop)
 		db.session.add(newStop)
 		db.session.commit()
 		return make_response('Stop created successfully', 200)
@@ -194,3 +191,20 @@ def createStop():
 		print(ex)
 		db.session.rollback()
 		return make_response('An error ocurred', 500)
+
+@login_required
+@app.route('/get_user_reservations/', methods=['GET'])
+def getUserReservations():
+	try:
+		reservations = Reservation.query.filter(Reservation.user_id == current_user.id).all()
+		res = []
+		for x in reservations:
+			res.append({
+				"date": x.date,
+				"trip_id": x.trip_id
+			})
+		return make_response(jsonify(res), 200)
+	except:
+		print('Something went wrong...')
+		return make_response('An error ocurred', 500)
+		

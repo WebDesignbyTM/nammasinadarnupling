@@ -82,8 +82,8 @@ export default function UserInfo(props) {
         </Grid>
 
         <Button className={classes.actionButton} variant="outlined" size="small" color="primary">
-          <Link to={userInfo?userInfo.usertype=='personal'?"/reservation":"/trip":""} style={{ textDecoration: 'none', color:theme.palette.primary.light}}>
-            {userInfo?userInfo.usertype=='personal'?'My reservations':'My routes':'Reserve/routes'}
+          <Link to="/home" style={{ textDecoration: 'none', color:theme.palette.primary.light}}>
+            {userInfo?userInfo.usertype=='personal'?'Rezervările mele':'Firmele mele':'Reserve/routes'}
           </Link>
         </Button>
 
