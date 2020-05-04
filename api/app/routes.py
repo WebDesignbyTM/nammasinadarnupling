@@ -200,6 +200,7 @@ def getUserReservations():
 		res = []
 		for x in reservations:
 			res.append({
+				"id": x.id,
 				"date": x.date,
 				"trip_id": x.trip_id
 			})
@@ -208,3 +209,15 @@ def getUserReservations():
 		print('Something went wrong...')
 		return make_response('An error ocurred', 500)
 		
+@app.route('/delete_reservation/', methods=['DELETE'])
+def deleteReservation():
+	data = request.get_json()['id']
+	try:
+		reservation = Reservation.query.filter(Reservation.id == data).first()
+		db.session.delete(reservation)
+		db.session.commit()
+		return make_response('Reservation deleted successfully', 200)
+	except Exception as ex:
+		print(ex)
+		db.session.rollback()
+		return make_response('An error ocurred', 500)

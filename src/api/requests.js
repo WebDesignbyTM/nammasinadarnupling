@@ -105,3 +105,11 @@ export const getUserReservations = async () => {
 		.get('/get_user_reservations/')
 	return res.data;
 }
+
+export const deleteReservation = async payload => {
+	const res = await axios
+		.delete('/delete_reservation/', {
+			data: { "id": payload.id }
+		});
+	return res;
+}

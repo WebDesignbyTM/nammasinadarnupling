@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
-import { getUserReservations } from '../../api/requests.js';
+import { getUserReservations, deleteReservation } from '../../api/requests.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,11 +27,24 @@ export default function UserProfile(props) {
       setReservations(res);
     }).catch(err => {
       console.log(err);
-    })
+    });
   }, []);
 
-  const deleteReservation = (reservation) => {
-    console.log(reservation);
+
+  const cancelReservation = (reservation) => {
+    let payload = { id: reservation.id };
+    deleteReservation(payload).then(res => {
+
+      console.log(res);
+      getUserReservations().then(res => {
+        setReservations(res);
+      }).catch(err => {
+        console.log(err);
+      });
+
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   return (
@@ -52,7 +65,7 @@ export default function UserProfile(props) {
             {
               icon: 'delete',
               tooltip: 'Anulează rezervarea',
-              onClick: (event, rowData) => deleteReservation(rowData)
+              onClick: (event, rowData) => cancelReservation(rowData)
             }
           ]}
           localization= {{
@@ -67,4 +80,4 @@ export default function UserProfile(props) {
       </main>
     </div>
   );
-}
+};
