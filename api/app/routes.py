@@ -59,13 +59,16 @@ def is_user_logged():
 
 @app.route('/get_user_data/')
 def get_user_data():
-	res={
-	"name":current_user.username,
-	"email":current_user.email,
-	"fullname":current_user.fullname,
-	"usertype":current_user.user_type
-	}
-	return res
+	try:
+		res={
+		"name":current_user.username,
+		"email":current_user.email,
+		"fullname":current_user.fullname,
+		"usertype":current_user.user_type
+		}
+		return res
+	except AttributeError:
+		return make_response('Login required for operation', 440)
 
 @app.route('/edit_user_data/', methods=['PUT'])
 def edit_user_data():
@@ -80,7 +83,6 @@ def edit_user_data():
 
 @app.route('/get_req_subtrips/', methods=['GET'])
 def get_req_subtrips():
-	print(request)
 	data = request.args.getlist('stop[]')
 	stop = []
 	[stop.append(Stop.query.filter_by(name=x).first()) for x in data]
@@ -142,13 +144,81 @@ def get_companies():
 @login_required
 @app.route('/make_reservation/', methods=['POST'])
 def makeReservation():
-	data = request.get_json()['params']['trip_id']
+	data = request.get_json()['trip_id']
 	try:
 		new_reservation = Reservation(user_id=current_user.id, trip_id=data)
 		db.session.add(new_reservation)
 		db.session.commit()
 	except:
-		print('Somethin went wrong...')
+		print('Something went wrong...')
+		db.session.rollback()
+		return make_response('An error ocurred', 500)
+	return make_response('Reservation successful', 200)
+
+@login_required
+@app.route('/get_user_companies/', methods=['GET'])
+def getUserCompanies():
+	try:
+		companies = Company.query.filter(Company.user_id == current_user.id)
+		res = []
+		for x in companies:
+			cars = Car.query.filter(Car.company_id == x.id).all()
+			trips = []
+			[ trips.append(y.id) for y in Trip.query.filter(Trip.company_id == x.id).all() ]
+			res.append({
+				'id': x.id,
+				'company_name': x.company_name,
+				'company_cui': x.company_cui,
+				'company_phone':x.company_phone,
+				'company_email':x.company_email,
+				'company_address':x.company_address,
+				'cars': cars,
+				'trips': trips
+			})
+		return make_response(jsonify(res), 200)
+	except:
+		return make_response('An error ocurred', 500)
+
+@app.route('/create_stop/', methods=['POST'])
+def createStop():
+	data = request.get_json()['name']
+	try:
+		newStop = Stop(name=data)
+		db.session.add(newStop)
+		db.session.commit()
+		return make_response('Stop created successfully', 200)
+	except Exception as ex:
+		print(ex)
+		db.session.rollback()
+		return make_response('An error ocurred', 500)
+
+@login_required
+@app.route('/get_user_reservations/', methods=['GET'])
+def getUserReservations():
+	try:
+		reservations = Reservation.query.filter(Reservation.user_id == current_user.id).all()
+		res = []
+		for x in reservations:
+			res.append({
+				"id": x.id,
+				"date": x.date,
+				"trip_id": x.trip_id
+			})
+		return make_response(jsonify(res), 200)
+	except:
+		print('Something went wrong...')
+		return make_response('An error ocurred', 500)
+
+@app.route('/delete_reservation/', methods=['DELETE'])
+def deleteReservation():
+	data = request.get_json()['id']
+	try:
+		reservation = Reservation.query.filter(Reservation.id == data).first()
+		db.session.delete(reservation)
+		db.session.commit()
+		return make_response('Reservation deleted successfully', 200)
+	except Exception as ex:
+		print(ex)
 		db.session.rollback()
 		return make_response('An error ocurred', 500)
 	return make_response('Reservation successful', 200)
