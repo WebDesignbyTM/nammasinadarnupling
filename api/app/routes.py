@@ -43,7 +43,7 @@ def register_company():
 		return make_response('No owner for company', 269)
 
 	try:
-		company=Company(company_name=data['name'], company_cui=data['cui'], company_phone=data['phone'], 
+		company=Company(company_name=data['name'], company_cui=data['cui'], company_phone=data['phone'],
 			company_email=data['email'], company_address=data['address'], user_id=current_user.id)
 		db.session.add(company)
 		db.session.commit()
@@ -152,3 +152,10 @@ def makeReservation():
 		db.session.rollback()
 		return make_response('An error ocurred', 500)
 	return make_response('Reservation successful', 200)
+
+@app.route('/get_stops/', methods=['GET'])
+def get_stops():
+	res=[]
+	for stop in Stop.query.all():
+		res.append({'name':stop.name})
+	return make_response(jsonify(res), 200)

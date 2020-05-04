@@ -16,16 +16,19 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 import HomeIcon from '@material-ui/icons/Home';
 import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
 import BusinessIcon from '@material-ui/icons/Business';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import SearchIcon from '@material-ui/icons/Search';
 import {Link} from 'react-router-dom';
 
 import Popper from '@material-ui/core/Popper';
 
 import User from '../../cards/user/user.jsx';
+import SearchRoute from '../searchroute/searchroute.jsx';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -56,6 +59,11 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     right: theme.drawer.rightMargin,
     color: theme.palette.secondary.dark,
+  },
+  searchButton: {
+    position:'absolute',
+    right:theme.drawer.rightMargin*3,
+    color:theme.palette.secondary.dark
   },
   hide: {
     display: 'none',
@@ -119,7 +127,7 @@ const useStyles = makeStyles((theme) => ({
 
   },
   title: {
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
   chevIcon: {
     color:theme.palette.secondary.main
@@ -127,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
   popper: {
     paddingTop:10,
     zIndex: theme.zIndex.drawer+2
-  }
+  },
 }));
 
 export default function Header(props) {
@@ -136,6 +144,7 @@ export default function Header(props) {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [popperOpen, setPopperOpen] = React.useState(false);
   const [popperAnchor, setPopperAnchor] = React.useState(null);
+  const [whichPopper, setWhichPopper] = React.useState('');
   const title=props.title;
   const pages=[
     {name:'Home', icon: HomeIcon, link:'/home'},
@@ -181,8 +190,12 @@ export default function Header(props) {
             {title}
           </Typography>
 
-          <IconButton className={classes.userButton} onClick={handlePopperClick}>
+          <IconButton className={classes.userButton} onClick={(evt)=>{handlePopperClick(evt);setWhichPopper('user')}}>
             <AccountCircleIcon />
+          </IconButton>
+
+          <IconButton className={classes.searchButton} onClick={(evt)=>{handlePopperClick(evt);setWhichPopper('search')}}>
+            <SearchIcon />
           </IconButton>
 
         </Toolbar>
@@ -190,7 +203,8 @@ export default function Header(props) {
 
       <Popper open={popperOpen} anchorEl={popperAnchor} placement='bottom-end' className={classes.popper}>
         <Paper>
-          <User/>
+          {whichPopper=='user'&&<User/>}
+          {whichPopper=='search'&&<SearchRoute hide={title=='transport'} searchButton={true}/>}
         </Paper>
       </Popper>
 

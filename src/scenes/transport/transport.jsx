@@ -7,13 +7,19 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import {getReqSubtrips, userLogged, makeReservation} from '../../api/requests.js';
+import {getReqSubtrips, userLogged, makeReservation, getStops} from '../../api/requests.js';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MaterialTable from 'material-table';
+
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import parse from 'autosuggest-highlight/parse';
+import match from 'autosuggest-highlight/match';
+import RemoveIcon from '@material-ui/icons/Remove';
+import AdvancedSearch from '../../components/advancedsearch/advancedsearch.jsx';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,6 +49,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     flex: 1,
   },
+  searchForm: {
+    paddingBottom:20,
+    marginBottom:40
+  }
 
 
 }));
@@ -50,28 +60,31 @@ const useStyles = makeStyles((theme) => ({
 export default function Transport(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const [stops, setStops] = useState(['']);
   const [trips, setTrips] = useState([]);
-  
-  const changeStop = (newVal, idx) => {
-    let aux = [...stops];
-    aux[idx] = newVal;
-    setStops(aux);
-  }
+  const [start, setStart] = useState(()=>{
+    if(props.location.state) {
+      return props.location.state.start;
+    }
+    return '';
+  });
+  const [destination, setDestination] = useState(()=>{
+    if(props.location.state) {
+      return props.location.state.destination;
+    }
+    return '';
+  });
 
-  const addStop = () => {
-    setStops(stops.concat(''));
-  }
+  React.useEffect(()=>{
+    if(props.location.state) {
+      getReqSubtrips([start,destination]).then(res=> {
+        setTrips(res);
+      })
+    }
 
-  const deleteStop = (idx) => {
-    let aux = [...stops];
-    aux.splice(idx, 1);
-    setStops(aux);
-  }
+  },[]);
 
-  const handleSubmit = (event) => {
-    if (event) 
-      event.preventDefault();
+  const handleSubmit = (stops) => {
+    console.log(stops);
     const payload = {stops: stops};
     const req = getReqSubtrips;
     req(payload).then(res=> {
@@ -103,26 +116,9 @@ export default function Transport(props) {
       <main className={classes.content}>
         <div className={classes.toolbarReplace} />
 
-        <div>
-          <form className={classes.searchForm} onSubmit={handleSubmit}>
-            {stops.map((stop, idx) => {
-              let lbl = "Stop no. " + (idx + 1);
-              return (
-                <div key={idx}>
-                  <TextField label={lbl} name={lbl.toLowerCase()} onChange={e => changeStop(e.target.value, idx)} value={stops[idx]}/>
-                  <Button variant="contained" color="secondary" onClick={() => deleteStop(idx)}>
-                    Delete stop
-                  </Button>
-                </div>)
-            })}
-            <Button variant="contained" color="secondary" onClick={addStop}>
-              Add stop
-            </Button>
-            <Button type="submit" variant="contained" color="secondary">
-              Submit
-            </Button>
-          </form>
-        </div>
+        <Paper>
+          <AdvancedSearch defaultValue={props.location.state} onSubmit={(val)=>{handleSubmit(val)}}/>
+        </Paper>
 
         <Paper>
           <MaterialTable

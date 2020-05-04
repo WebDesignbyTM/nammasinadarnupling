@@ -85,3 +85,9 @@ export const makeReservation = async payload => {
 		})
 	return res.data
 }
+
+export const getStops = async payload => {
+	const res = await axios
+	.get('/get_stops/')
+	return res;
+}
