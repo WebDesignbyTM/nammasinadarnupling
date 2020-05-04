@@ -38,18 +38,17 @@ const useStyles = makeStyles((theme) => ({
 export default function CompanyProfile(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const company_data=props.selectedCompany;
+  const company=(props.selectedCompany)?props.selectedCompany:{};
 
   useEffect(() => {
     console.log(props);
-  });
+  }, []);
 
   return (
     <div>
       <main className={classes.content}>
         <Typography>
-          Check out our website: TO BE CONTINUED
-          Check out our latest offers!!
+          Aceasta este pagina de profil a companiei {company.company_name}
         </Typography>
       </main>
 
