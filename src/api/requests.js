@@ -113,3 +113,8 @@ export const deleteReservation = async payload => {
 		});
 	return res;
 }
+export const getStops = async payload => {
+	const res = await axios
+	.get('/get_stops/')
+	return res;
+}
