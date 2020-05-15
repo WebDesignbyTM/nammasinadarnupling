@@ -1,7 +1,8 @@
 from app import app, db
 from flask_login import logout_user, login_required, current_user, login_user
-from app.models import User, Stop, Leg, Route, Trip, Company, Car, Reservation
+from app.models import User, Stop, Leg, Route, Trip, Company, Car, Reservation, Pattern
 from flask import jsonify, request, json, make_response
+from datetime import datetime, date, timedelta
 from sqlalchemy import *
 import sqlalchemy
 
@@ -227,5 +228,71 @@ def deleteReservation():
 def get_stops():
 	res=[]
 	for stop in Stop.query.all():
-		res.append({'name':stop.name})
+		res.append({'name':stop.name, 'id':stop.id})
 	return make_response(jsonify(res), 200)
+
+@app.route('/create_pattern/', methods=['POST'])
+def create_pattern():
+	data=request.get_json()
+	newPattern=Pattern(trip_id=data['trip_id'],
+	recurring_type=data['recurring_type'])
+	if data['recurring_type']=='none' :
+		newPattern.date_time=datetime(data['date_time']['year'],
+		data['date_time']['month'],
+		data['date_time']['day'],
+		data['date_time']['hour'],
+		data['date_time']['minute'])
+	else:
+		newPattern.separation_count=data['separation_count']
+		newPattern.minute_of_day=data['time_of_day']['hour']*60+data['time_of_day']['minute']
+		if data['recurring_type']=='weekly':
+			newPattern.day_of_week=data['day_of_week']
+	db.session.add(newPattern)
+	db.session.commit()
+	return make_response('Pattern added', 200)
+
+@app.route('/get_following_trip_dates/', methods=['GET'])
+def get_following_trip_dates():
+	data=request.get_json()
+	trip=data['trip_id']
+	duration=data['duration']
+	res=[]
+	for p in Pattern.query.filter(Pattern.trip_id==trip).all():
+		if p.recurring_type == 'none':
+			t=abs(p.date_time-datetime.today())
+			if t <= timedelta(duration):
+				res.append({"year":p.date_time.year,
+				"month":p.date_time.month,
+				"day":p.date_time.day,
+				"hour":p.date_time.hour,
+				"minute":p.date_time.minute})
+
+	return make_response(jsonify(res), 200)
+
+@app.route('/create_route/', methods=['POST'])
+def create_route():
+	r=Route()
+	db.session.add(r)
+	db.session.commit()
+	data=request.get_json()
+	stops=data['stops']
+	for i in stops:
+		print(r.id, i)
+		l=Leg(route_id=r.id, stop_id=i)
+		db.session.add(l)
+		db.session.commit()
+	res={"routeid":r.id}
+	return make_response(jsonify(res), 200)
+
+@app.route('/create_trip/', methods=['POST'])
+def create_trip():
+	data=request.get_json()
+	try:
+		assert Company.query.filter(Company.id==data['company_id']).first().user_id==current_user.id
+		t=Trip(company_id=data['company_id'], route_id=data['route_id'])
+		db.session.add(t)
+		db.session.commit()
+		res={"tripid":t.id,"routeid":t.route_id}
+		return make_response(jsonify(res), 200)
+	except AssertionError:
+		return make_response('Nu aveti permisiunile necesare', 403)

@@ -13,6 +13,9 @@ import Card from '@material-ui/core/Card';
 import { createStop } from '../../api/requests.js';
 import { Alert } from '@material-ui/lab';
 import Snackbar from '@material-ui/core/Snackbar';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import AddTrip from '../addtrip/addtrip.jsx';
 
 
 
@@ -46,9 +49,10 @@ export default function CompanyCtrlPanel(props) {
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [dialog, setDialog] = useState(false);
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') 
+    if (reason === 'clickaway')
       return;
 
     setOpen(false);
@@ -73,23 +77,31 @@ export default function CompanyCtrlPanel(props) {
     })
   };
   const stopForm = useForm(addStop);
-  
+
 
   return (
     <Card className={classes.root} variant="outlined">
       <form className={classes.form} onSubmit={stopForm.handleSubmit}>
         <TextField className={classes.dataField} variant="outlined"
         label="Stație nouă" name="stop" onChange={stopForm.handleInputChange}/>
-        <Button className={classes.submitButton} variant="contained" 
+        <Button className={classes.submitButton} variant="contained"
         color="primary" type="submit">
           Adaugă stație
         </Button>
       </form>
 
-      
-      <Snackbar 
-        open={open} 
-        autoHideDuration={4000} 
+      <Button onClick={()=>{setDialog(true)}}>
+        Adauga cursa
+      </Button>
+
+      <Dialog open={dialog} onClose={()=>{setDialog(false)}}>
+        <DialogTitle>Cursa Noua</DialogTitle>
+        <AddTrip companyid={props.company?props.company.id:undefined}/>
+      </Dialog>
+
+      <Snackbar
+        open={open}
+        autoHideDuration={4000}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         {function () {

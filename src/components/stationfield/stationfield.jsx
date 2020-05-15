@@ -26,7 +26,7 @@ export default function StationField(props) {
   React.useEffect(()=>{
     getStops({}).then(res=>{
       if(res.status==200){
-        setStops(res.data.map((el,idx)=>el.name));
+        setStops(res.data.map((el,idx)=>el));
       }
     })
   }, [])
@@ -35,7 +35,7 @@ export default function StationField(props) {
       multiple={props.multiple}
       id="from"
       options={stops}
-      getOptionLabel={(option)=>option}
+      getOptionLabel={(option)=>option.name}
       defaultValue={props.defaultValue}
       onChange={(evt,val)=> {
         props.onChange(val);
@@ -45,8 +45,8 @@ export default function StationField(props) {
         className={classes.fields} margin="normal"/>
       )}
       renderOption={(option, { inputValue }) => {
-        const matches = match(option, inputValue);
-        const parts = parse(option, matches);
+        const matches = match(option.name, inputValue);
+        const parts = parse(option.name, matches);
 
         return (
           <div>

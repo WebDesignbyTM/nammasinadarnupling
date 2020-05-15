@@ -91,7 +91,7 @@ export default function Home(props) {
   }, []);
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') 
+    if (reason === 'clickaway')
       return;
 
     setOpen(false);
@@ -124,13 +124,13 @@ export default function Home(props) {
                       getOptionLabel={(option) => option.company_name}
                       style={{ width: 300 }}
                       onChange={(event, newValue) => selectCompany(newValue)}
-                      renderInput={(params) => 
-                        <TextField 
-                          {...params} 
-                          label="Firmă" 
+                      renderInput={(params) =>
+                        <TextField
+                          {...params}
+                          label="Firmă"
                           variant="outlined"/>}
                     />
-                    
+
                     {function() {
                       if (selectedCompany)
                         return (
@@ -139,7 +139,7 @@ export default function Home(props) {
                           </div>)
                       }()
                     }
-                    <CompanyCtrlPanel/>
+                    <CompanyCtrlPanel company={selectedCompany}/>
                   </div>);
               else if (user.usertype === 'personal')
                 return (
