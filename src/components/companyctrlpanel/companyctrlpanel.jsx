@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
-import { createStop } from '../../api/requests.js'
+import { createStop } from '../../api/requests.js';
 import { Alert } from '@material-ui/lab';
 import Snackbar from '@material-ui/core/Snackbar';
 
@@ -89,7 +89,7 @@ export default function CompanyCtrlPanel(props) {
       
       <Snackbar 
         open={open} 
-        autoHideDuration={10000} 
+        autoHideDuration={4000} 
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         {function () {

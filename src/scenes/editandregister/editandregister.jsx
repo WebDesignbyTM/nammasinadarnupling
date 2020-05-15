@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     flex:1,
     alignItems:'center',
     justifyContent:'center',
+    minHeight: '100vh'
   },
   toolbarReplace: {
     ...theme.mixins.toolbar
@@ -88,7 +89,7 @@ export default function EditAndRegister(props) {
     } else {
       setTitle('Register');
     }
-  }, [])
+  }, [logged])
 
   const [errorOpen, setErrorOpen] = React.useState(false);
 

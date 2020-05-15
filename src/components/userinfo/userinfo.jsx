@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
   card:{
     minWidth: 300,
     alignItems:'center',
-    borderRadius:10
+    borderRadius:10,
+    paddingBottom: theme.spacing(1)
   },
   content: {
     textAlign:'center',
@@ -58,7 +59,7 @@ export default function UserInfo(props) {
 
 
   return (
-    <Card className={classes.card}>
+    <div className={classes.card}>
       <Grid container
         direction="column"
       >
@@ -69,7 +70,7 @@ export default function UserInfo(props) {
           alignItems="center"
         >
           <AccountCircleIcon fontSize='large'/>
-          <CardContent classes={classes.content}>
+          <CardContent>
             <Typography variant="h6">
               {userInfo?userInfo.fullname:"Fullname"}
             </Typography>
@@ -100,7 +101,7 @@ export default function UserInfo(props) {
         </Button>
 
       </Grid>
-    </Card>
+    </div>
   )
 
 }
