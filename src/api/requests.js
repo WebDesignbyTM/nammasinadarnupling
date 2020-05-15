@@ -118,3 +118,29 @@ export const getStops = async payload => {
 	.get('/get_stops/')
 	return res;
 }
+export const createRoute = async payload => {
+	const res = await axios
+	.post('/create_route/', {"stops":payload.stops})
+	return res;
+}
+export const createTrip = async payload => {
+	const res = await axios
+	.post('/create_trip/', {"company_id":payload.company_id,"route_id":payload.route_id})
+	return res;
+}
+
+export const createPattern = async payload => {
+	console.log(payload)
+		let aux={"trip_id":payload.trip_id,
+		"recurring_type":"none",
+		"date_time":{
+			"year":payload.year,
+			"month":payload.month,
+			"day":payload.day,
+			"hour":payload.hour,
+			"minute":payload.minute
+		}};
+	const res = await axios
+	.post('/create_pattern/', aux)
+	return res;
+}

@@ -88,6 +88,7 @@ export default function Transport(props) {
     const payload = {stops: stops};
     const req = getReqSubtrips;
     req(payload).then(res=> {
+      console.log(res)
       setTrips(res);
     });
   }

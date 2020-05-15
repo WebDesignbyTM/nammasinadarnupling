@@ -43,12 +43,13 @@ class Trip(db.Model):
   reservations = db.relationship('Reservation', backref='trip', lazy='dynamic')
   route_id = db.Column(db.Integer, db.ForeignKey('route.id'))
   company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
+  patterns = db.relationship('Pattern', backref='pattern', lazy='dynamic')
 
   def __repr__(self):
     return '<Trip id {}>'.format(self.id)
 
 class Route(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
+  id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   trips = db.relationship('Trip', backref='route', lazy='dynamic')
   legs = db.relationship('Leg', backref='route', lazy='dynamic')
 
@@ -56,8 +57,8 @@ class Route(db.Model):
     return '<Route id {}>'.format(self.id)
 
 class Leg(db.Model):
-  leg_no = db.Column(db.Integer, primary_key=True)
-  route_id = db.Column(db.Integer, db.ForeignKey('route.id'), primary_key=True)
+  leg_no = db.Column(db.Integer, primary_key=True, autoincrement=True)
+  route_id = db.Column(db.Integer, db.ForeignKey('route.id'))
   stop_id = db.Column(db.Integer, db.ForeignKey('stop.id'))
 
   def __repr__(self):
@@ -93,3 +94,15 @@ class Car(db.Model):
 
   def __repr__(self):
     return '<Car id {}>'.format(self.id)
+
+class Pattern(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    trip_id = db.Column(db.Integer, db.ForeignKey('trip.id'))
+    recurring_type = db.Column(db.String(64))
+    separation_count = db.Column(db.Integer)
+    day_of_week = db.Column(db.Integer)
+    minute_of_day = db.Column(db.Integer)
+    date_time=db.Column(db.DateTime)
+
+    def __repr__(self):
+        return '<Pattern id {}>'.format(self.id)

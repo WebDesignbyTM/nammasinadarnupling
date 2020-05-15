@@ -10,6 +10,8 @@ import Trips from './scenes/trips/trips.jsx';
 import EditAndRegister from './scenes/editandregister/editandregister.jsx';
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 
 const theme = createMuiTheme({
@@ -34,25 +36,27 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
-        <header>
-          <Router>
-          <div>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <div className="App">
+          <header>
+            <Router>
+            <div>
 
-            {/* A <Switch> looks through its children <Route>s and
-                renders the first one that matches the current URL. */}
-            <Switch>
-              <Route path="/companies" component={Companies}/>
-              <Route path="/transport" component={Transport}/>
-              <Route path="/register" component={EditAndRegister}/>
-              <Route path="/reservation" component={Reservations}/>
-              <Route path="/trip" component={Trips}/>
-              <Route path={["/home", "/"]} component={Home}/>
-            </Switch>
-          </div>
-        </Router>
-        </header>
-      </div>
+              {/* A <Switch> looks through its children <Route>s and
+                  renders the first one that matches the current URL. */}
+              <Switch>
+                <Route path="/companies" component={Companies}/>
+                <Route path="/transport" component={Transport}/>
+                <Route path="/register" component={EditAndRegister}/>
+                <Route path="/reservation" component={Reservations}/>
+                <Route path="/trip" component={Trips}/>
+                <Route path={["/home", "/"]} component={Home}/>
+              </Switch>
+            </div>
+          </Router>
+          </header>
+        </div>
+        </MuiPickersUtilsProvider>
       </ThemeProvider>
   );
 }
