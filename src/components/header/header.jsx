@@ -133,7 +133,6 @@ const useStyles = makeStyles((theme) => ({
     color:theme.palette.secondary.main
   },
   popper: {
-    paddingTop:10,
     zIndex: theme.zIndex.drawer+2
   },
 }));
@@ -159,9 +158,14 @@ export default function Header(props) {
     setDrawerOpen(false);
   };
 
-  const handlePopperClick = (event) => {
+  const handlePopperClick = (event, component) => {
     setPopperAnchor(event.currentTarget);
-    setPopperOpen((prev)=>!prev);
+    if (component == whichPopper)
+      setPopperOpen((prev)=>!prev);
+    else {
+      setWhichPopper(component);
+      setPopperOpen(true);
+    }
   }
 
   return (
@@ -190,11 +194,11 @@ export default function Header(props) {
             {title}
           </Typography>
 
-          <IconButton className={classes.userButton} onClick={(evt)=>{handlePopperClick(evt);setWhichPopper('user')}}>
+          <IconButton className={classes.userButton} onClick={(evt)=>{handlePopperClick(evt, 'user');}}>
             <AccountCircleIcon />
           </IconButton>
 
-          <IconButton className={classes.searchButton} onClick={(evt)=>{handlePopperClick(evt);setWhichPopper('search')}}>
+          <IconButton className={classes.searchButton} onClick={(evt)=>{handlePopperClick(evt, 'search');}}>
             <SearchIcon />
           </IconButton>
 
@@ -235,13 +239,13 @@ export default function Header(props) {
               <ListItem className={classes.drawerListItem} button key={page.name}>
                 <ListItemIcon className={clsx({
                   [classes.drawerIcon]:(page.link!=window.location.pathname),
-                  [classes.drawerIconSelected]:(page.link==window.location.pathname),
+                  [classes.drawerIconSelected]:(window.location.pathname.indexOf(page.link) != -1),
                 })}>
                   <page.icon/>
                  </ListItemIcon>
                 <ListItemText className={clsx({
                   [classes.drawerText]:(page.link!=window.location.pathname),
-                  [classes.drawerTextSelected]:(page.link==window.location.pathname),
+                  [classes.drawerTextSelected]:(window.location.pathname.indexOf(page.link) != -1),
                 })} primary={page.name} />
               </ListItem>
             </Link>

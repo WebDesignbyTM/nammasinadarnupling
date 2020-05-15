@@ -15,7 +15,13 @@ import StationField from '../stationfield/stationfield.jsx';
 import {Link} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
+  searchRoot: {
+    padding: theme.spacing(1),
+  },
   fields:{
+  },
+  button: {
+    margin: theme.spacing(1)
   },
   hide:{
     display:'none',
@@ -41,7 +47,8 @@ export default function SearchRoute(props) {
   }, [])
 
   return (
-    <div className={clsx({
+    <div className={clsx(
+      classes.searchRoot, {
       [classes.hide]:props.hide
     })}>
         <form className={classes.searchForm} onSubmit={handleSubmit}>
@@ -51,23 +58,27 @@ export default function SearchRoute(props) {
           justify='center'>
 
             <StationField label="Punct plecare" defaultValue={props.defaultValue?props.defaultValue.start:undefined}
+            className={classes.fields}
             onChange={(val)=> {
-                setStart(val?val.name:'');
+              setStart(val?val:'');
             }}/>
 
             <RemoveIcon/>
 
             <StationField label="Destinatie" defaultValue={props.defaultValue?props.defaultValue.destination:undefined}
+            className={classes.fields}
               onChange={(val)=>{
-                  setDestination(val?val.name:'');
+                setDestination(val?val:'');
             }}/>
 
-            <Button type="submit" variant="contained" color="secondary"
-            className={clsx({
+            <Button type="submit" variant="contained" color="primary"
+            className={clsx(
+              classes.button, {
               [classes.hide]:!props.searchButton
             })}>
-              <Link to={{pathname: '/transport/', state:{start:start, destination:destination}}}>
-                Cauta
+              <Link to={{pathname: '/transport/', state:{start:start, destination:destination}}}
+                style={{ textDecoration: 'none', color: 'black' }}>
+                Caută
               </Link>
             </Button>
 

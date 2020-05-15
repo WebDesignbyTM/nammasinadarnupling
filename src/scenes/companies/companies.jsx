@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
     display:'flex',
     backgroundColor:theme.palette.primary.main,
     flex:1,
-    justifyContent:'center'
+    justifyContent:'center',
+    height: '100vh'
   },
   toolbarReplace: {
     ...theme.mixins.toolbar

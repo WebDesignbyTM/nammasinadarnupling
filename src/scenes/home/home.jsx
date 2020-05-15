@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     display:'flex',
     backgroundColor:theme.palette.primary.main,
     flex:1,
+    minHeight: '100vh'
   },
   toolbarReplace: {
     ...theme.mixins.toolbar
@@ -152,7 +153,7 @@ export default function Home(props) {
 
       <Snackbar 
         open={open} 
-        autoHideDuration={10000} 
+        autoHideDuration={6000} 
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         <Alert severity="error" variant="filled" onClose={handleClose}>

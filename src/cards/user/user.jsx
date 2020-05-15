@@ -17,7 +17,7 @@ import {userLogged} from '../../api/requests.js';
 const useStyles = makeStyles((theme) => ({
   root:{
     display:'flex',
-    backgroundColor:theme.palette.primary.main,
+    // backgroundColor:theme.palette.primary.main,
     flex:1,
   },
   card:{
@@ -41,10 +41,10 @@ export default function User(props) {
 
   return (
     <div className={classes.root}>
-      <Card className={classes.card}>
+      {/* <Card className={classes.card}> */}
         {logged && <UserInfo extended={false}/>}
         {!logged && <UserLogin/>}
-      </Card>
+      {/* </Card> */}
     </div>
   )
 }
