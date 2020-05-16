@@ -57,8 +57,8 @@ class Route(db.Model):
     return '<Route id {}>'.format(self.id)
 
 class Leg(db.Model):
-  leg_no = db.Column(db.Integer, primary_key=True, autoincrement=True)
-  route_id = db.Column(db.Integer, db.ForeignKey('route.id'))
+  leg_no = db.Column(db.Integer, primary_key=True)
+  route_id = db.Column(db.Integer, db.ForeignKey('route.id'), primary_key=True)
   stop_id = db.Column(db.Integer, db.ForeignKey('stop.id'))
 
   def __repr__(self):
