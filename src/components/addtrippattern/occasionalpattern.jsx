@@ -7,11 +7,23 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles=makeStyles((theme)=>({
-
+  root: {
+    margin: theme.spacing(2),
+    padding: theme.spacing(1),
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+  picker: {
+    margin: theme.spacing(1),
+    paddingRight: theme.spacing(4),
+  },
 }));
 
 export default function OccasionalPattern(props) {
-
+  const classes = useStyles();
   const [selectedDate, handleDateChange] = React.useState(new Date());
 
   const addPattern = () => {
@@ -23,11 +35,14 @@ export default function OccasionalPattern(props) {
   }
 
   return (
-    <div>
-      <DateTimePicker value={selectedDate} onChange={handleDateChange} />
-      <Button onClick={()=>{
-        addPattern();
-      }}>
+    <div className={classes.root}>
+      <DateTimePicker className={classes.picker} value={selectedDate} onChange={handleDateChange} />
+      <Button 
+        classame={classes.button}
+        variant="outlined"
+        onClick={()=>{
+          addPattern();
+        }}>
         Add pattern
       </Button>
     </div>

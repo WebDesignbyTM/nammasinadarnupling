@@ -64,7 +64,7 @@ export default function Transport(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [trips, setTrips] = useState([]);
-  const [message, setMessage] = useState('Rezervarea');
+  const [message, setMessage] = useState('Rezervarea ');
   const [open, setOpen] = useState(false);
   const [isError, setIsError] = useState(false);
   const [start, setStart] = useState(()=>{

@@ -53,14 +53,14 @@ export default function AdvancedSearch(props) {
         justify='center'>
           <StationField label="Punct plecare" defaultValue={props.defaultValue?props.defaultValue.start:undefined}
           onChange={(val)=> {
-              setStart(val?val.name:'');
+              setStart(val);
           }}/>
           <StationField label="Destinatie" defaultValue={props.defaultValue?props.defaultValue.destination:undefined}
             onChange={(val)=>{
-                setDestination(val?val.name:'');
+                setDestination(val);
           }}/>
         </Grid>
-        <StationField multiple={true} label="Statii intermediare" onChange={(val)=>{setStops(val.map((el,id)=>el.name));}}/>
+        <StationField multiple={true} label="Statii intermediare" onChange={(val)=>{setStops(val.map((el,id)=>el));}}/>
         <Button style={{display:displaySearchButton}} onClick={()=>{
           let aux=[start,...stops,destination];
           props.onSubmit(aux);

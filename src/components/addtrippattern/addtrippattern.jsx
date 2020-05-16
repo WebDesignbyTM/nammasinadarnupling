@@ -7,11 +7,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import OccasionalPattern from './occasionalpattern.jsx';
 
 const useStyles=makeStyles((theme)=>({
-
+  select: {
+    margin: theme.spacing(2),
+    padding: theme.spacing(1),
+  },
 }));
 
 export default function AddTripPattern(props) {
-
+  const classes = useStyles();
   const [type, setType] = React.useState(0);
 
   const typeName = ['Ocazional', 'Zilnic', 'Saptamanal'];
@@ -20,25 +23,24 @@ export default function AddTripPattern(props) {
 
   return (
     <div>
-      <Card>
-        <Grid container
-        direction='column'>
-          <Select
-            labelId="Tip cursa"
-            value={type}
-            onChange={(evt) => {
-              setType(evt.target.value);
-            }}
-          >
-            <MenuItem value={0}>Ocazional</MenuItem>
-            <MenuItem value={1}>Zilnic</MenuItem>
-            <MenuItem value={2}>Saptamanal</MenuItem>
-          </Select>
+      <Grid container
+      direction='column'>
+        <Select
+        className={classes.select}
+          labelId="Tip cursa"
+          value={type}
+          onChange={(evt) => {
+            setType(evt.target.value);
+          }}
+        >
+          <MenuItem value={0}>Ocazional</MenuItem>
+          <MenuItem value={1}>Zilnic</MenuItem>
+          <MenuItem value={2}>Saptamanal</MenuItem>
+        </Select>
 
-          {patternComp[type]}
+        {patternComp[type]}
 
-        </Grid>
-      </Card>
+      </Grid>
     </div>
   )
 }

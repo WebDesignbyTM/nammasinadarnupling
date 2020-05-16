@@ -14,7 +14,7 @@ import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   fields:{
-    width:200
+    minWidth:200
   },
 
 }));

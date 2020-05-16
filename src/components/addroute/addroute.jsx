@@ -10,10 +10,13 @@ import Typography from '@material-ui/core/Typography';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ClearIcon from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {createRoute} from '../../api/requests.js';
 
 const useStyles=makeStyles((theme)=>({
-
+  button: {
+    margin: theme.spacing(1)
+  },
 }));
 
 export default function AddRoute(props) {
@@ -35,8 +38,8 @@ export default function AddRoute(props) {
 
   const deleteStation = (id) => {
     setStops(prev=>{
-      let aux=prev;
-      aux.splice(id);
+      let aux=[...prev];
+      aux.splice(id, 1);
       console.log(aux);
       return aux;
     })
@@ -54,28 +57,29 @@ export default function AddRoute(props) {
         {stops.map((stop, idx)=>{
 
           return (
-            <ListItem key={idx} >
-              <StationField onChange={(val)=>{
-                modifyStation(val.id, idx);
-              }}/>
+            <ListItem key={idx}>
+              <StationField 
+                onChange={(val)=>{
+                  modifyStation(val.id, idx);
+                }}/>
               <ListItemSecondaryAction>
                 <IconButton edge="end" aria-label="Confirm"
                 onClick={()=>{
                   deleteStation(idx);
                 }}>
-                  <ClearIcon />
+                  <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
           )
         })}
       </List>
-      <Button onClick={addStation}>
-        Adauga statie
+      <Button className={classes.button} variant="outlined" onClick={addStation}>
+        Adaugă stație
       </Button>
 
-      <Button onClick={makeRoute}>
-        Adauga Ruta
+      <Button className={classes.button} variant="outlined" onClick={makeRoute}>
+        Adaugă rută
       </Button>
     </div>
   )

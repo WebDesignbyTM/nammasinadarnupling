@@ -85,9 +85,15 @@ def edit_user_data():
 @app.route('/get_req_subtrips/', methods=['GET'])
 def get_req_subtrips():
 	data = request.args.getlist('stop[]')
-	data = list(map(eval, data))
-	stop = []
-	[stop.append(Stop.query.filter_by(id=x['id']).first()) for x in data]
+	try:
+		data = list(map(eval, data))
+		stop = []
+		[stop.append(Stop.query.filter_by(id=x['id']).first()) for x in data]
+	except NameError:
+		return make_response('Input is corrupted', 400)
+	except Exception as ex:
+		print(ex)
+		return make_response('An error ocurred', 500)
 
 	try:
 		legs = Leg.query.filter_by(stop_id=stop[0].id).all()
@@ -148,11 +154,14 @@ def get_companies():
 def makeReservation():
 	data = request.get_json()['trip_id']
 	try:
+		pattern = Pattern.query.filter(Pattern.trip_id==data).first()
 		new_reservation = Reservation(user_id=current_user.id, trip_id=data)
+		if pattern != None:
+			new_reservation.date = pattern.date_time
 		db.session.add(new_reservation)
 		db.session.commit()
-	except:
-		print('Something went wrong...')
+	except Exception as ex:
+		print(ex)
 		db.session.rollback()
 		return make_response('An error ocurred', 500)
 	return make_response('Reservation successful', 200)
@@ -248,8 +257,13 @@ def create_pattern():
 		newPattern.minute_of_day=data['time_of_day']['hour']*60+data['time_of_day']['minute']
 		if data['recurring_type']=='weekly':
 			newPattern.day_of_week=data['day_of_week']
-	db.session.add(newPattern)
-	db.session.commit()
+	try:
+		db.session.add(newPattern)
+		db.session.commit()
+	except Exception as ex:
+		print(ex)
+		db.session.rollback()
+		return make_response('An error ocurred', 500)
 	return make_response('Pattern added', 200)
 
 @app.route('/get_following_trip_dates/', methods=['GET'])
@@ -278,10 +292,14 @@ def create_route():
 	data=request.get_json()
 	stops=data['stops']
 	for i in range(len(stops)):
-		print(r.id, stops[i])
 		l=Leg(route_id=r.id, stop_id=stops[i], leg_no=i+1)
-		db.session.add(l)
-		db.session.commit()
+		try:
+			db.session.add(l)
+			db.session.commit()
+		except Exception as ex:
+			print(ex)
+			db.session.rollback()
+			return make_response('An error ocurred while processing route stops', 500)
 	res={"routeid":r.id}
 	return make_response(jsonify(res), 200)
 

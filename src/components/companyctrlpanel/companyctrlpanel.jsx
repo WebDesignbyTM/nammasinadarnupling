@@ -16,6 +16,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import AddTrip from '../addtrip/addtrip.jsx';
+import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
 
 
 
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   dataField: {
     margin: theme.spacing(1),
   },
-  submitButton: {
+  button: {
     margin: theme.spacing(1),
     padding: theme.spacing(1.9),
     flexGrow:1,
@@ -39,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
   form: {
     margin: theme.spacing(1),
   },
-
 
 }));
 
@@ -84,19 +84,24 @@ export default function CompanyCtrlPanel(props) {
       <form className={classes.form} onSubmit={stopForm.handleSubmit}>
         <TextField className={classes.dataField} variant="outlined"
         label="Stație nouă" name="stop" onChange={stopForm.handleInputChange}/>
-        <Button className={classes.submitButton} variant="contained"
+        <Button className={classes.button} variant="contained"
         color="primary" type="submit">
           Adaugă stație
         </Button>
       </form>
 
-      <Button onClick={()=>{setDialog(true)}}>
-        Adauga cursa
+      <Button className={classes.button} 
+        variant="outlined" 
+        style={{width: 380}}
+        color="primary" 
+        endIcon={<DirectionsBusIcon/>}
+        onClick={()=>{setDialog(true)}}>
+        Adaugă cursă
       </Button>
 
-      <Dialog open={dialog} onClose={()=>{setDialog(false)}}>
-        <DialogTitle>Cursa Noua</DialogTitle>
-        <AddTrip companyid={props.company?props.company.id:undefined}/>
+      <Dialog open={dialog} scroll='body' onClose={()=>{setDialog(false)}}>
+        <DialogTitle>Cursă Nouă</DialogTitle>
+        <AddTrip companyid={props.company?props.company.id:undefined} onFinish={()=>{setDialog(false)}}/>
       </Dialog>
 
       <Snackbar
