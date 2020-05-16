@@ -52,6 +52,7 @@ export const userEditData = payload => {
 }
 
 export const getReqSubtrips = async payload => {
+	console.log(payload);
 	const res = await axios
 		.get('/get_req_subtrips/', {
 			params: { stop: payload.stops }

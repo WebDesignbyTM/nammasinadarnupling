@@ -136,10 +136,12 @@ export default function Home(props) {
                         return (
                           <div>
                             <CompanyProfile selectedCompany={selectedCompany}/>
+                            <CompanyCtrlPanel company={selectedCompany}/>
                           </div>)
+                      else
+                        return (<p>Vă rugăm să selectați o firmă!</p>)
                       }()
                     }
-                    <CompanyCtrlPanel company={selectedCompany}/>
                   </div>);
               else if (user.usertype === 'personal')
                 return (

@@ -85,8 +85,9 @@ def edit_user_data():
 @app.route('/get_req_subtrips/', methods=['GET'])
 def get_req_subtrips():
 	data = request.args.getlist('stop[]')
+	data = list(map(eval, data))
 	stop = []
-	[stop.append(Stop.query.filter_by(name=x).first()) for x in data]
+	[stop.append(Stop.query.filter_by(id=x['id']).first()) for x in data]
 
 	try:
 		legs = Leg.query.filter_by(stop_id=stop[0].id).all()
@@ -276,9 +277,9 @@ def create_route():
 	db.session.commit()
 	data=request.get_json()
 	stops=data['stops']
-	for i in stops:
-		print(r.id, i)
-		l=Leg(route_id=r.id, stop_id=i)
+	for i in range(len(stops)):
+		print(r.id, stops[i])
+		l=Leg(route_id=r.id, stop_id=stops[i], leg_no=i+1)
 		db.session.add(l)
 		db.session.commit()
 	res={"routeid":r.id}
@@ -287,6 +288,7 @@ def create_route():
 @app.route('/create_trip/', methods=['POST'])
 def create_trip():
 	data=request.get_json()
+	print(data)
 	try:
 		assert Company.query.filter(Company.id==data['company_id']).first().user_id==current_user.id
 		t=Trip(company_id=data['company_id'], route_id=data['route_id'])
