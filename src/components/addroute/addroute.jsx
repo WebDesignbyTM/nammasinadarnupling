@@ -12,6 +12,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {createRoute} from '../../api/requests.js';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles=makeStyles((theme)=>({
   button: {
@@ -63,12 +64,14 @@ export default function AddRoute(props) {
                   modifyStation(val.id, idx);
                 }}/>
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="Confirm"
-                onClick={()=>{
-                  deleteStation(idx);
-                }}>
-                  <DeleteIcon />
-                </IconButton>
+                <Tooltip title="Eliminați stația">
+                  <IconButton edge="end" aria-label="Confirm"
+                  onClick={()=>{
+                    deleteStation(idx);
+                  }}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
               </ListItemSecondaryAction>
             </ListItem>
           )

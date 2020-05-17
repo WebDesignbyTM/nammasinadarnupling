@@ -43,7 +43,7 @@ export default function OccasionalPattern(props) {
         onClick={()=>{
           addPattern();
         }}>
-        Add pattern
+        Adaugă tipar
       </Button>
     </div>
   )

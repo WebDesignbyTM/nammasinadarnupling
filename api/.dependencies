@@ -1,1 +1,1 @@
-pip install flask python-dotenv flask-sqlalchemy flask-migrate flask-login werkzeug.security
+pip install flask python-dotenv flask-sqlalchemy flask-migrate flask-login werkzeug
