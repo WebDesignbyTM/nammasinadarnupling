@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -79,10 +79,19 @@ export default function AddTrip(props) {
         return <AddTripPattern tripid={trip}/>
       case 2:
         return <AddTripDetails/>
+      case 3:
+        return <p>Cererea dvs. a fost înregistrată</p>
       default:
         return 'Unknown stepIndex';
     }
   }
+
+  useEffect(() => {
+    if (activeStep == 3) {
+      handleOpen();
+      setTimeout(() => { props.onFinish(); }, 3000);
+    }
+  }, [activeStep]);
 
   return(
     <div className={classes.root}>
@@ -94,15 +103,6 @@ export default function AddTrip(props) {
         ))}
       </Stepper>
       <div>
-        { function () {
-          if (activeStep === steps.length) {
-            if (open == false) {
-              handleOpen();
-              props.onFinish();
-            }
-            return (<div></div>);
-          } else
-            return (<div>
               <DialogContent>
                 {getStepContent(activeStep)}
               </DialogContent>
@@ -118,8 +118,7 @@ export default function AddTrip(props) {
                   {activeStep === steps.length - 1 ? 'Finalizați' : 'Avansați'}
                 </Button>
               </DialogActions>
-            </div>);
-        }() }
+           
       </div>
       
       <Snackbar 
